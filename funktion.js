@@ -1,4 +1,4 @@
-// Hier sagen wir dem Browser nur, dass erm nachdem die Seite vollständig geladen
+// Hier sagen wir dem Browser nur, dass erm nachdem die Seite vollständig geladen 
 // wurde, die Funktion main(ohne Argumente) aufrufen soll.
 window.onload = function() {
     main();
