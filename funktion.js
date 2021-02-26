@@ -30,26 +30,74 @@ function main() {
     strDebug += "calendarweek:" + calendarweek + "<br/>";
 
     //Tagesanzahl des Monats
-    var lastMonthDays = new Date(year, month+1, 0);
-    var monthDays = getMonthDays(lastMonthDays);
+    var lastDayThisMonth = new Date(year, month + 1, 0);
+    var monthDays = lastDayThisMonth.getDate();
     strDebug += "monthDays:" + monthDays + "<br/>";
 
+    // Erster des Monats
+    var firstDayThisMonth = new Date(year, month, 1);
+    var firstDayOfCalendar = firstDayThisMonth;
+    var x = 0;
+    while (firstDayOfCalendar.getDay() != 1) {
+        firstDayOfCalendar = new Date(year, month, x);
+        x--;
+    }
+    var lastDayOfCalendar = lastDayThisMonth;
+    x = 1;
+    while (lastDayOfCalendar.getDay() != 0) {
+        lastDayOfCalendar = new Date(year, month + 1, x);
+        x++;
+    }
 
 
+    // Wir füllen die Informationen in den HTML-Code
+    document.getElementById("field1").innerHTML = datTodayGerman;
+    document.getElementById("field3").innerHTML = datTodayGerman;
+    document.getElementById("field2").innerHTML = weekdayGerman;
+    document.getElementById("field4").innerHTML = weekdayGerman;
+    document.getElementById("field5").innerHTML = monthGerman;
+    document.getElementById("field6").innerHTML = year;
+    document.getElementById("field7").innerHTML = datTodayGerman;
+    document.getElementById("field8").innerHTML = datTodayGerman;
+    document.getElementById("field9").innerHTML = calendarweek;
+    document.getElementById("field10").innerHTML = monthDays;
 
-// Wir füllen die Informationen in den HTML-Code
-document.getElementById("field1").innerHTML = datTodayGerman;
-document.getElementById("field3").innerHTML = datTodayGerman;
-document.getElementById("field2").innerHTML = weekdayGerman;
-document.getElementById("field4").innerHTML = weekdayGerman;
-document.getElementById("field5").innerHTML = monthGerman;
-document.getElementById("field6").innerHTML = year;
-document.getElementById("field7").innerHTML = datTodayGerman;
-document.getElementById("field8").innerHTML = datTodayGerman;
-document.getElementById("field9").innerHTML = calendarweek;
-document.getElementById("field10").innerHTML = monthDays;
+    var html = '<table>';
+    html += '<thead>';
+    html += '<tr>';
+    html += '        <th colspan="8">' + monthGerman + year + '</th>';
+    html += '    </tr>';
+    html += '    <tr>';
+    html += '        <th class="kw">KW</th>';
+    html += '        <th class="mo">Mo</th>';
+    html += '        <th class="di">Di</th>';
+    html += '        <th class="mi">Mi</th>';
+    html += '        <th class="do">Do</th>';
+    html += '        <th class="fr">Fr</th>';
+    html += '        <th class="sa">Sa</th>';
+    html += '        <th class="so">So</th>';
+    html += '    </tr>';
+    html += '</thead>';
+    html += '<tb>';
 
+    for (var d = firstDayOfCalendar; d <= lastDayOfCalendar; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+        html += getHtmlForOneDay(d);
+    }
+    // html += '    <tr>';
+    // html += '        <td class="kw">5</td>';
+    // html += '        <td class="mo heute">1</td>';
+    // html += '        <td class="di">2</td>';
+    // html += '        <td class="mi">3</td>';
+    // html += '        <td class="do">4</td>';
+    // html += '        <td class="fr">5</td>';
+    // html += '        <td class="sa">6</td>';
+    // html += '        <td class="so">7</td>';
+    // html += '    </tr>';
 
+    html += '</table>';
+
+    // Kalenderblatt-Start
+    document.getElementById("kalenderblatt").innerHTML = html;
 
     // Ausgabe in das elDebug
     var elDebug = document.getElementById("debug");
@@ -58,6 +106,11 @@ document.getElementById("field10").innerHTML = monthDays;
     } else {
         console.log("Debug-Element nicht gefunden.");
     }
+}
+
+function getHtmlForOneDay(date) {
+    var html = '';
+    return html;
 }
 
 function getDateGerman(date) {
@@ -76,28 +129,15 @@ function getDateGerman(date) {
 }
 
 function getWeekdayGerman(weekdayIndex) {
-    if (weekdayIndex == 0) {
-        return "Sonntag";
-    } else if (weekdayIndex == 1) {
-        return "Montag";
-    } else if (weekdayIndex == 2) {
-        return "Dienstag";
-    } else if (weekdayIndex == 3) {
-        return "Mittwoch";
-    } else if (weekdayIndex == 4) {
-        return "Donnerstag";
-    } else if (weekdayIndex == 5) {
-        return "Freitag";
-    } else if (weekdayIndex == 6) {
-        return "Samstag";
-    }
+    var weekdaysGerman = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+    return weekdaysGerman[weekdayIndex];
 }
 
 function getMonthGerman(monthIndex) {
     if (monthIndex == 0) {
         return "Januar";
     } else if (monthIndex == 1) {
-        return "Februar";    
+        return "Februar";
     } else if (monthIndex == 2) {
         return "März";
     } else if (monthIndex == 3) {
@@ -131,9 +171,4 @@ function getCalendarweek(calendarweekDayIndex) {
     } else if (calendarweekDayIndex <= 28) {
         return "vierte";
     } else return "fünfte";
-}
-
-function getMonthDays(lastMonthDaysIndex) {
-    monthDays = lastMonthDaysIndex.getDate();
-    return monthDays;
 }
