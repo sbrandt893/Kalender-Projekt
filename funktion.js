@@ -1,6 +1,6 @@
 // Hier sagen wir dem Browser nur, dass erm nachdem die Seite vollständig geladen 
 // wurde, die Funktion main(ohne Argumente) aufrufen soll.
-window.onload = function() {
+window.onload = function () {
     main();
 };
 
@@ -65,7 +65,7 @@ function main() {
     var html = '<table>';
     html += '<thead>';
     html += '<tr>';
-    html += '        <th colspan="8">' + monthGerman + year + '</th>';
+    html += '        <th colspan="8">' + monthGerman + " " + year + '</th>';
     html += '    </tr>';
     html += '    <tr>';
     html += '        <th class="kw">KW</th>';
@@ -78,13 +78,15 @@ function main() {
     html += '        <th class="so">So</th>';
     html += '    </tr>';
     html += '</thead>';
-    html += '<tb>';
+
+
 
     for (var d = firstDayOfCalendar; d <= lastDayOfCalendar; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
         html += getHtmlForOneDay(d);
     }
-    // html += '    <tr>';
-    // html += '        <td class="kw">5</td>';
+
+
+
     // html += '        <td class="mo heute">1</td>';
     // html += '        <td class="di">2</td>';
     // html += '        <td class="mi">3</td>';
@@ -110,8 +112,28 @@ function main() {
 
 function getHtmlForOneDay(date) {
     var html = '';
+    if (date.getDay() == 1) {
+        html += '<tr>';
+        html += '<td class="kw">' + weekYear + '</td>';
+    }
+    html += '<td class="mo heute">1</td>';
+    if (date.getDay() == 0) {
+        html += '</tr>';
+    }
+
+
     return html;
 }
+
+
+
+var weekYear = date();
+var currentThursday = new Date(date.getTime() + (3 - ((date.getDay() + 6) % 7)) * 86400000);
+var yearOfThursday = currentThursday.getFullYear();
+var firstThursday = new Date(new Date(yearOfThursday, 0, 4).getTime() + (3 - ((new Date(yearOfThursday, 0, 4).getDay() + 6) % 7)) * 86400000);
+var weekNumber = Math.floor(1 + 0.5 + (currentThursday.getTime() - firstThursday.getTime()) / 86400000 / 7);
+
+
 
 function getDateGerman(date) {
     day = date.getDate();
