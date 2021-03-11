@@ -1,6 +1,6 @@
 // Hier sagen wir dem Browser nur, dass erm nachdem die Seite vollständig geladen 
 // wurde, die Funktion main(ohne Argumente) aufrufen soll.
-window.onload = function () {
+window.onload = function() {
     main();
 };
 
@@ -26,7 +26,7 @@ function main() {
 
     //Kalenderwoche
     var calendarweekDay = datToday.getDate();
-    var calendarweek = getCalendarweek(calendarweekDay);
+    var calendarweek = getCalendarweekGerman(calendarweekDay);
     strDebug += "calendarweek:" + calendarweek + "<br/>";
 
     //Tagesanzahl des Monats
@@ -113,25 +113,19 @@ function main() {
 function getHtmlForOneDay(date) {
     var html = '';
     if (date.getDay() == 1) {
+        var weekNumber = getCalendarweek(date);
         html += '<tr>';
-        html += '<td class="kw">' + weekYear + '</td>';
+        html += '<td class="kw">' + weekNumber + '</td>';
     }
     html += '<td class="mo heute">1</td>';
     if (date.getDay() == 0) {
         html += '</tr>';
     }
-
-
     return html;
 }
 
 
 
-var weekYear = date();
-var currentThursday = new Date(date.getTime() + (3 - ((date.getDay() + 6) % 7)) * 86400000);
-var yearOfThursday = currentThursday.getFullYear();
-var firstThursday = new Date(new Date(yearOfThursday, 0, 4).getTime() + (3 - ((new Date(yearOfThursday, 0, 4).getDay() + 6) % 7)) * 86400000);
-var weekNumber = Math.floor(1 + 0.5 + (currentThursday.getTime() - firstThursday.getTime()) / 86400000 / 7);
 
 
 
@@ -183,7 +177,16 @@ function getMonthGerman(monthIndex) {
     }
 }
 
-function getCalendarweek(calendarweekDayIndex) {
+function getCalendarweek(date) {
+    var currentThursday = new Date(date.getTime() + (3 - ((date.getDay() + 6) % 7)) * 86400000);
+    var yearOfThursday = currentThursday.getFullYear();
+    var firstThursday = new Date(new Date(yearOfThursday, 0, 4).getTime() + (3 - ((new Date(yearOfThursday, 0, 4).getDay() + 6) % 7)) * 86400000);
+    var weekNumber = Math.floor(1 + 0.5 + (currentThursday.getTime() - firstThursday.getTime()) / 86400000 / 7);
+    return weekNumber;
+}
+
+
+function getCalendarweekGerman(calendarweekDayIndex) {
     if (calendarweekDayIndex <= 7) {
         return "erste";
     } else if (calendarweekDayIndex <= 14) {
