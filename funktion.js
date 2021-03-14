@@ -1,6 +1,6 @@
 // Hier sagen wir dem Browser nur, dass erm nachdem die Seite vollständig geladen 
 // wurde, die Funktion main(ohne Argumente) aufrufen soll.
-window.onload = function() {
+window.onload = function () {
     main();
 };
 
@@ -87,7 +87,7 @@ function main() {
 
 
 
-    // html += '        <td class="mo heute">1</td>';
+
     // html += '        <td class="di">2</td>';
     // html += '        <td class="mi">3</td>';
     // html += '        <td class="do">4</td>';
@@ -109,23 +109,40 @@ function main() {
         console.log("Debug-Element nicht gefunden.");
     }
 }
-
+/// Erstellt für jeden Tag eine HTML-Zeile
 function getHtmlForOneDay(date) {
     var html = '';
+    /// Wenn Montag..
     if (date.getDay() == 1) {
+        /// Gib der Variable den Wert der Funktion (aktuelle Kalenderwoche)
         var weekNumber = getCalendarweek(date);
+        /// Gib HTML diese Zeile (erstelle eine neue Tabellenzeile)
         html += '<tr>';
+        /// Gib HTML diese Zeile (erstelle eine neue Tabellendate mit der Klasse kw + der Kalenderwoche)
         html += '<td class="kw">' + weekNumber + '</td>';
     }
-    html += '<td class="mo heute">1</td>';
+
+
+    var klasse = getWeekdayShortcut(date);
+    var heute = new Date();
+
+    if (date.getMonth() == heute.getMonth() && date.getDate() == heute.getDate()) {
+        klasse += ' heute';
+
+        ///  html += '<td class="mo heute">' + date.getDate() + '</td>';
+    }
+
+    html += '<td class="' + klasse + '">' + date.getDate() + '</td>';
+
+
+
     if (date.getDay() == 0) {
         html += '</tr>';
     }
+
     return html;
+
 }
-
-
-
 
 
 
@@ -196,4 +213,11 @@ function getCalendarweekGerman(calendarweekDayIndex) {
     } else if (calendarweekDayIndex <= 28) {
         return "vierte";
     } else return "fünfte";
+}
+
+function getWeekdayShortcut(date) {
+    let weekday = getWeekdayGerman(date.getDay());
+    weekday = weekday.substring(0, 2);
+    weekday = weekday.toLowerCase();
+    return weekday;
 }
