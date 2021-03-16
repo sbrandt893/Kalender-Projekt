@@ -49,6 +49,14 @@ function main() {
         x++;
     }
 
+    // Feiertag
+    let holidayHTML = '';
+    let holidayArray = getHolidayArrayHessen(datToday);
+    if (holidayArray.includes(datToday.getTime())) {
+        holidayHTML = 'Der ' + datTodayGerman + ' ist ein gesetzlicher Feiertag in Hessen.';
+    } else {
+        holidayHTML = 'Der ' + datTodayGerman + ' ist kein gesetzlicher Feiertag in Hessen. ';
+    }
 
     // Wir füllen die Informationen in den HTML-Code
     document.getElementById("field1").innerHTML = datTodayGerman;
@@ -57,7 +65,7 @@ function main() {
     document.getElementById("field4").innerHTML = weekdayGerman;
     document.getElementById("field5").innerHTML = monthGerman;
     document.getElementById("field6").innerHTML = year;
-    document.getElementById("field7").innerHTML = datTodayGerman;
+    document.getElementById("field7").innerHTML = holidayHTML;
     document.getElementById("field8").innerHTML = datTodayGerman;
     document.getElementById("field9").innerHTML = calendarweek;
     document.getElementById("field10").innerHTML = monthDays;
@@ -82,7 +90,7 @@ function main() {
 
 
     for (var d = firstDayOfCalendar; d <= lastDayOfCalendar; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
-        html += getHtmlForOneDay(d);
+        html += getHtmlForOneDay(d, holidayArray);
     }
 
 
@@ -109,8 +117,9 @@ function main() {
         console.log("Debug-Element nicht gefunden.");
     }
 }
+
 /// Erstellt für jeden Tag eine HTML-Zeile
-function getHtmlForOneDay(date) {
+function getHtmlForOneDay(date, holidayArray) {
     var html = '';
     /// Wenn Montag..
     if (date.getDay() == 1) {
@@ -128,9 +137,16 @@ function getHtmlForOneDay(date) {
 
     if (date.getMonth() == heute.getMonth() && date.getDate() == heute.getDate()) {
         klasse += ' heute';
-
-        ///  html += '<td class="mo heute">' + date.getDate() + '</td>';
     }
+    var time = date.getTime();
+    if (date.getMonth() == 3 && date.getDate() == 4) {
+        console.log(time);
+        console.log(new Date(time));
+    }
+    if (holidayArray.includes(time)) {
+        klasse += ' feiertag';
+    }
+
 
     html += '<td class="' + klasse + '">' + date.getDate() + '</td>';
 
@@ -220,4 +236,45 @@ function getWeekdayShortcut(date) {
     weekday = weekday.substring(0, 2);
     weekday = weekday.toLowerCase();
     return weekday;
+}
+
+function getHolidayArrayHessen(date) {
+    let year = date.getFullYear();
+    let array = [];
+    array.push(new Date(year - 1, 11, 25).getTime()); // 1. Weihnachtstag Vorjahr
+    array.push(new Date(year - 1, 11, 26).getTime()); // 2. Weihnachtstag Vorjahr
+    array.push(new Date(year, 0, 1).getTime()); // Neujahr
+    array.push(new Date(year, 4, 1).getTime()); // Tag der Arbeit
+    array.push(new Date(year, 9, 3).getTime()); // Tag der Dt. Einheit
+    array.push(new Date(year, 11, 25).getTime()); // 1. Weihnachtstag
+    array.push(new Date(year, 11, 26).getTime()); // 2. Weihnachtstag
+    array.push(new Date(year + 1, 0, 1).getTime()); // Neujahr nächstes Jahr
+    let osterSonntag = getEasterSunday(year);
+    array.push(osterSonntag.getTime());
+    let osterMontag = new Date(year, osterSonntag.getMonth(), osterSonntag.getDate() + 1);
+    array.push(osterMontag.getTime());
+    let christiHimmelfahrt = new Date(year, osterSonntag.getMonth(), osterSonntag.getDate() + 39);
+    array.push(christiHimmelfahrt.getTime());
+    let pfingstMontag = new Date(year, osterSonntag.getMonth(), osterSonntag.getDate() + 50);
+    array.push(pfingstMontag.getTime());
+    let fronLeichnam = new Date(year, osterSonntag.getMonth(), osterSonntag.getDate() + 60);
+    array.push(fronLeichnam.getTime());
+    return array;
+}
+
+function getEasterSunday(Jahr) { // Erstellt von Ralf Pfeifer (www.arstechnica.de)
+    // Falls ausserhalb des gültigen Datumsbereichs, kein Ergebnis zurueckgeben
+    if ((Jahr < 1970) || (2099 < Jahr)) return null;
+    var a = Jahr % 19;
+    var d = (19 * a + 24) % 30;
+    var Tag = d + (2 * (Jahr % 4) + 4 * (Jahr % 7) + 6 * d + 5) % 7;
+    if ((Tag == 35) || ((Tag == 34) && (d == 28) && (a > 10))) { Tag -= 7; }
+
+
+
+    //OsterDatum.setTime(OsterDatum.getTime() + 86400000 * Tag);
+    var OsterDatum = new Date(Jahr, 2, 22 + Tag);
+    console.log(OsterDatum);
+    return OsterDatum;
+
 }
