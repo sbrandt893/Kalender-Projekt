@@ -35,7 +35,6 @@ function changeTime(timeToday) {
     let days = lastDayThisMonth.getDate();
 
 
-
     //Kalenderwoche
     let calendarweekDay = datToday.getDate();
     let calendarweek = getCalendarweekGerman(calendarweekDay);
@@ -53,7 +52,7 @@ function changeTime(timeToday) {
     }
 
     // Wir füllen die Informationen in den HTML-Code
-    //document.title = 'Kalenderblatt: ' + datTodayGerman;
+    document.title = 'Kalenderblatt: ' + datTodayGerman;
     document.getElementById("field1").innerHTML = datTodayGerman;
     document.getElementById("field3").innerHTML = datTodayGerman;
     document.getElementById("field2").innerHTML = weekdayGerman;
@@ -65,9 +64,30 @@ function changeTime(timeToday) {
     document.getElementById("field9").innerHTML = calendarweek;
     document.getElementById("field10").innerHTML = days;
 
+	
     let htmlTabelle = getCalendarHTML(datToday, holidayArray);
     document.getElementById("kalenderblatt").innerHTML = htmlTabelle;
+    
+	
+	let coll = document.getElementsByClassName("collapsible");
+let i;
 
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    let content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+} 
+	
+	
+	
+	
+	
     // Ausgabe in das elDebug
     let elDebug = document.getElementById("debug");
     if (elDebug != null) {
@@ -88,19 +108,20 @@ function getCalendarHTML(date, holidayArray) {
     let firstDayOfCalendar = firstDayThisMonth;
     let x = 0;
     while (firstDayOfCalendar.getDay() != 1) {
-        firstDayOfCalendar = new Date(year, month, x);
+        firstDayOfCalendar = new Date(date.getFullYear(), date.getMonth(), x);
         x--;
     }
 
+	
     //Tagesanzahl des Monats
-    let lastDayThisMonth = new Date(year, month + 1, 0);
-    // let monthDays = lastDayThisMonth.getDate();
-    //strDebug += "monthDays:" + monthDays + "<br/>";
-
+    let lastDayThisMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    let monthDays = lastDayThisMonth;
+    
+	
     let lastDayOfCalendar = lastDayThisMonth;
     x = 1;
     while (lastDayOfCalendar.getDay() != 0) {
-        lastDayOfCalendar = new Date(year, month + 1, x);
+        lastDayOfCalendar = new Date(date.getFullYear(), date.getMonth() + 1, x);
         x++;
     }
 
@@ -185,7 +206,8 @@ function getHtmlForOneDay(date, today, holidayArray) {
 }
 
 function calendarHTML_footer() {
-    html = '</tbody></table>';
+    let html = '</tbody> </table>';
+	return html;
 }
 
 

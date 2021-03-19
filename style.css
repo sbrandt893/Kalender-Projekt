@@ -84,6 +84,13 @@ th.so {
     background: unset;
 }
 
+#kalenderblatt td.feiertag {
+    background: lightcoral;
+}
+
+#kalenderblatt td.feiertag:hover {
+	background: lightcoral;
+}
 
 #introtext {
     padding: 1em;
@@ -132,6 +139,36 @@ span {
     background: lightcoral;
 }
 
-.feiertag {
-    background: lightcoral;
+.style1{
+    background-color:red;
+    color:white;
 }
+
+.selectable {
+	cursor: pointer;
+}
+
+
+
+ /* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  background-color: orange;
+  color: #444;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: auto;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: lightcoral;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+#debug {
+  display: none;
+  overflow: hidden;
+} 
